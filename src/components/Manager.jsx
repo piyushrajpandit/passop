@@ -52,31 +52,21 @@ const Manager = () => {
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
-    const savePassword = () => {
-        if (form.site.length === 0 || form.username.length === 0 || form.password.length === 0) {
+const savePassword = () => {
+    if (form.site.length > 0 && form.username.length > 0 && form.password.length > 0) {
+        const newPassword = { ...form, id: uuidv4() };
+        const updatedArray = [...passwordArray, newPassword];
 
-            
-            setPasswordArray([...passwordArray,{...form, id: uuidv4()}])
-            localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form, id: uuidv4()}]))
-            console.log([...passwordArray, form])
-            setForm({ site: "", username: "", password: "" })
-            toast('🦄 saved password successfully', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                
-            });
-        }
-        else{
+        setPasswordArray(updatedArray);
+        localStorage.setItem("passwords", JSON.stringify(updatedArray));
 
-             toast('🦄 Error : Password not saved')
-        }
+        setForm({ site: "", username: "", password: "" });
+        toast('🦄 saved password successfully', { theme: "dark" });
+    } else {
+        toast('🦄 Error: Please fill in all fields', { theme: "dark" });
     }
+};
+
 
     
     const deletePassword = (id) => {
